@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0A4A4A">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Rebobina FM">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icons/rebobina_flechas_favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="image" href="./images/rebobina-logo.webp" type="image/webp" fetchpriority="high">
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&amp;display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&amp;display=swap"></noscript>
+  <title>Rebobina FM</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: "Fredoka", system-ui, sans-serif;
+      background: #0A4A4A;
+      color: #EBE6AE;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      min-width: 280px;
+      min-height: 100vh;
+      min-height: 100svh;
+      margin: 0;
+      padding: max(24px, env(safe-area-inset-top)) 20px
+        max(24px, env(safe-area-inset-bottom));
+      background:
+        radial-gradient(ellipse at 50% 0%, rgb(2 181 151 / 18%), transparent 55%),
+        #0A4A4A;
+    }
+
+    main {
+      display: flex;
+      width: min(100%, 820px);
+      min-height: calc(100svh - 48px);
+      margin: 0 auto;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(24px, 6vh, 54px);
+    }
+
+    .brand {
+      display: block;
+      width: min(78vw, 380px);
+      height: auto;
+      filter: drop-shadow(0 12px 28px rgb(0 0 0 / 25%));
+    }
+
+    #player {
+      display: grid;
+      width: 100%;
+      grid-template-columns: minmax(140px, 240px) minmax(0, 1fr) auto;
+      grid-template-rows: minmax(0, 1fr) auto;
+      grid-template-areas:
+        "art info info"
+        "art volume play";
+      align-items: center;
+      gap: 20px 24px;
+      padding: clamp(18px, 4vw, 32px);
+      border: 1px solid rgb(235 230 174 / 14%);
+      border-radius: 28px;
+      background: rgb(0 0 0 / 16%);
+      box-shadow: 0 24px 70px rgb(0 0 0 / 24%);
+      color: #EBE6AE;
+      font-family: "Fredoka", system-ui, sans-serif;
+    }
+
+    #radio-stream {
+      display: none;
+    }
+
+    #player-art {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 1;
+      grid-area: art;
+      border-radius: 18px;
+      background: rgb(0 0 0 / 18%);
+      object-fit: cover;
+      box-shadow: 0 10px 28px rgb(0 0 0 / 22%);
+    }
+
+    #player-art[hidden] {
+      display: none;
+    }
+
+    #player-info {
+      display: flex;
+      min-width: 0;
+      grid-area: info;
+      flex-direction: column;
+      justify-content: center;
+      line-height: 1.2;
+    }
+
+    #player-title {
+      overflow: hidden;
+      color: #EBE6AE;
+      font-size: clamp(22px, 4vw, 34px);
+      font-weight: 700;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    #player-artist {
+      overflow: hidden;
+      margin-top: 7px;
+      color: rgb(235 230 174 / 76%);
+      font-size: clamp(16px, 2.6vw, 22px);
+      font-weight: 500;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    #player-status {
+      min-height: 18px;
+      margin-top: 10px;
+      color: #FFB627;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+    }
+
+    #player-volume-control {
+      display: flex;
+      min-width: 0;
+      grid-area: volume;
+      align-items: center;
+      gap: 10px;
+    }
+
+    #player-volume {
+      width: 100%;
+      min-width: 0;
+      height: 32px;
+      accent-color: #FFB627;
+      cursor: pointer;
+    }
+
+    #player-volume-level {
+      width: 40px;
+      color: rgb(235 230 174 / 76%);
+      font-size: 13px;
+      font-variant-numeric: tabular-nums;
+      text-align: right;
+    }
+
+    #player-toggle {
+      display: grid;
+      width: 64px;
+      height: 64px;
+      grid-area: play;
+      place-items: center;
+      border: 0;
+      border-radius: 50%;
+      background: #FFB627;
+      color: #000;
+      cursor: pointer;
+      box-shadow: 0 6px 16px rgb(0 0 0 / 22%);
+      transition: transform 140ms ease, box-shadow 140ms ease;
+    }
+
+    #player-toggle:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 9px 20px rgb(0 0 0 / 26%);
+    }
+
+    #player-toggle:active {
+      transform: translateY(1px);
+    }
+
+    #player-toggle:focus-visible {
+      outline: 3px solid #EBE6AE;
+      outline-offset: 4px;
+    }
+
+    #player-toggle svg {
+      display: block;
+      width: 28px;
+      height: 28px;
+    }
+
+    @media (max-width: 560px) {
+      body {
+        padding-right: 16px;
+        padding-left: 16px;
+      }
+
+      main {
+        min-height: calc(100svh - 48px);
+        gap: 28px;
+      }
+
+      .brand {
+        width: min(72vw, 290px);
+      }
+
+      #player {
+        grid-template-columns: 84px minmax(0, 1fr) 54px;
+        grid-template-rows: auto auto;
+        grid-template-areas:
+          "art info play"
+          "volume volume volume";
+        gap: 16px 14px;
+        padding: 18px;
+        border-radius: 22px;
+      }
+
+      #player-art {
+        border-radius: 12px;
+      }
+
+      #player-title {
+        font-size: clamp(17px, 5vw, 22px);
+      }
+
+      #player-artist {
+        margin-top: 4px;
+        font-size: 14px;
+      }
+
+      #player-status {
+        margin-top: 6px;
+        font-size: 11px;
+      }
+
+      #player-toggle {
+        width: 52px;
+        height: 52px;
+      }
+
+      #player-toggle svg {
+        width: 24px;
+        height: 24px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <img class="brand" src="./images/rebobina-logo.webp" alt="Rebobina FM — Donde los 90 y 2000 nunca dejaron de sonar">
+    <section id="player" aria-label="Reproductor de Rebobina FM"></section>
+  </main>
+  <script src="./player.js" defer></script>
+  <script src="./news.js" defer></script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js").catch((error) => {
+          console.error("No se pudo registrar la Progressive Web App:", error);
+        });
+      });
+    }
+  </script>
+</body>
+</html>
